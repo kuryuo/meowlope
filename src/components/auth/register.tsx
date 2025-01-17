@@ -1,0 +1,116 @@
+import { Link } from "react-router-dom";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import styles from "./auth.module.css";
+
+const validationSchema = Yup.object({
+  username: Yup.string()
+    .min(3, "Username must be at least 3 characters")
+    .max(20, "Username must be less than 20 characters")
+    .required("Username is required"),
+  email: Yup.string().email("Invalid email format").required("Email is required"),
+  password: Yup.string()
+    .min(6, "Password must be at least 6 characters")
+    .required("Password is required"),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref("password")], "Passwords must match")
+    .required("Confirm password is required"),
+});
+
+export default function Register() {
+  // Инициализируем Formik с валидацией и начальным состоянием
+  const formik = useFormik({
+    initialValues: {
+      username: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    }, // Передаем начальные значения из состояния
+    validationSchema, // Применяем схему валидации
+    enableReinitialize: true, // Чтобы форма перерисовывалась при изменении состояния
+    onSubmit: (values) => {
+      console.log("Form submitted:", values);
+    },
+  });
+
+  return (
+    <div className={styles.container}>
+      <h2>Sign up</h2>
+      <form onSubmit={formik.handleSubmit} className={styles.form}>
+        <div className={styles.inputGroup}>
+          <label htmlFor="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            value={formik.values.username}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            required
+          />
+          {formik.touched.username && formik.errors.username && (
+            <div className={styles.error}>{formik.errors.username}</div>
+          )}
+        </div>
+
+        <div className={styles.inputGroup}>
+          <label htmlFor="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            required
+          />
+          {formik.touched.email && formik.errors.email && (
+            <div className={styles.error}>{formik.errors.email}</div>
+          )}
+        </div>
+
+        <div className={styles.inputGroup}>
+          <label htmlFor="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            required
+          />
+          {formik.touched.password && formik.errors.password && (
+            <div className={styles.error}>{formik.errors.password}</div>
+          )}
+        </div>
+
+        <div className={styles.inputGroup}>
+          <label htmlFor="confirmPassword">Confirm Password</label>
+          <input
+            type="password"
+            id="confirmPassword"
+            name="confirmPassword"
+            value={formik.values.confirmPassword}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            required
+          />
+          {formik.touched.confirmPassword && formik.errors.confirmPassword && (
+            <div className={styles.error}>{formik.errors.confirmPassword}</div>
+          )}
+        </div>
+
+        <button type="submit" className={styles.submitButton}>
+          Sign up
+        </button>
+      </form>
+      <p className={styles.loginPrompt}>
+        Already have an account?{" "}
+        <Link to="/login" className={styles.loginLink}>
+          Log In
+        </Link>
+      </p>
+    </div>
+  );
+}
