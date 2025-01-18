@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './auth.module.css';
-
+// import Icon from '../../assets/Vector.svg?react';
 export default function Login() {
   const [formData, setFormData] = useState({
     email: '',
@@ -24,6 +24,7 @@ export default function Login() {
   return (
     <div className={styles.container}>
       <h2>Log In</h2>
+      {/* <Icon color="var(--lavender)" /> */}
       <form onSubmit={handleSubmit} className={styles.form}>
         <div className={styles.inputGroup}>
           <label htmlFor="email">Email</label>
