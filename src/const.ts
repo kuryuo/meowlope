@@ -1,6 +1,7 @@
 export const AppRoute = {
   Register: '/',
   Login: '/login',
-  Header: '/header'
+  Header: '/header',
+  Menu: '/menu'
 }
 export const APIRoute = {}

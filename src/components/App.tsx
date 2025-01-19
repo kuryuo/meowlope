@@ -4,6 +4,7 @@ import { AppRoute } from "../const";
 import Register from "../components/auth/register";
 import Login from "../components/auth/login";
 import Header from "../components/header/header";
+import Menu from "../components/menu/menu"
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
           <Route path={AppRoute.Register} element={<Register />} />
           <Route path={AppRoute.Login} element={<Login />} />
           <Route path={AppRoute.Header} element={<Header />} />
+          <Route path={AppRoute.Menu} element={<Menu />}/>
         </Routes>
       </BrowserRouter>
     </HelmetProvider>
