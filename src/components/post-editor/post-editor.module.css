@@ -1,0 +1,46 @@
+.postEditor {
+  background-color: var(--light-grey);
+  border: 1px solid var(--grey);
+  padding: 16px;
+  border-radius: 8px;
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.input {
+  width: 100%;
+  height: 120px;
+  border: 1px solid var(--grey);
+  background-color: var(--white);
+  padding: 10px;
+  font-size: 16px;
+  outline: none;
+  position: relative;
+  resize: vertical;
+}
+
+.icons {
+  position: absolute;
+  left: 30px;
+  bottom: 65px;
+  display: flex;
+  gap: 10px;
+}
+
+.icon {
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.postButton {
+  background-color: var(--lavender);
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 14px;
+  margin-left: auto;
+  display: block;
+}

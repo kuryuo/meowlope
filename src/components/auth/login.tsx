@@ -1,12 +1,18 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { login } from '../../services/api';
+import { setTokens } from '../../services/token';
+import { AppRoute } from '../../const';
 import styles from './auth.module.css';
-// import Icon from '../../assets/Vector.svg?react';
+import axios from 'axios';
+
 export default function Login() {
   const [formData, setFormData] = useState({
-    email: '',
+    username: '',
     password: '',
   });
+
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -16,23 +22,42 @@ export default function Login() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Login data submitted:', formData);
+    setErrorMessage('');
+
+    try {
+      const response = await login(formData.username, formData.password);
+
+      if (response.status === 200) {
+        const { refresh, access } = response.data;
+
+        setTokens(access.token, refresh.token);
+
+        console.log('Вы успешно вошли в систему:', response.data);
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        setErrorMessage(error.response?.data?.detail || 'Ошибка при входе. Проверьте данные.');
+        console.error('Ошибка входа:', error.response?.data);
+      } else {
+        setErrorMessage('Что-то пошло не так.');
+        console.error('Непредвиденная ошибка:', error);
+      }
+    }
   };
 
   return (
     <div className={styles.container}>
       <h2>Log In</h2>
-      {/* <Icon color="var(--lavender)" /> */}
       <form onSubmit={handleSubmit} className={styles.form}>
         <div className={styles.inputGroup}>
-          <label htmlFor="email">Email</label>
+          <label htmlFor="username">Username</label>
           <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
+            type="text"
+            id="username"
+            name="username"
+            value={formData.username}
             onChange={handleChange}
             required
           />
@@ -50,13 +75,15 @@ export default function Login() {
           />
         </div>
 
+        {errorMessage && <p className={styles.error}>{errorMessage}</p>}
+
         <button type="submit" className={styles.submitButton}>
           Log In
         </button>
       </form>
       <p className={styles.registerPrompt}>
         Don’t have an account?{' '}
-        <Link to="/" className={styles.registerLink}>
+        <Link to={AppRoute.Register} className={styles.registerLink}>
           Sign Up
         </Link>
       </p>
