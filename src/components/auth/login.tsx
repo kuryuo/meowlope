@@ -1,18 +1,19 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { login } from '../../services/api';
-import { setTokens } from '../../services/token';
+import { Link, Navigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { loginAsync } from '../../store/authSlice';
+import { RootState } from '../../store';
 import { AppRoute } from '../../const';
 import styles from './auth.module.css';
-import axios from 'axios';
 
 export default function Login() {
+  const dispatch = useAppDispatch();  
+  const { isAuthenticated, loading, error } = useAppSelector((state: RootState) => state.auth);
+
   const [formData, setFormData] = useState({
     username: '',
     password: '',
   });
-
-  const [errorMessage, setErrorMessage] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -22,30 +23,15 @@ export default function Login() {
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setErrorMessage('');
-
-    try {
-      const response = await login(formData.username, formData.password);
-
-      if (response.status === 200) {
-        const { refresh, access } = response.data;
-
-        setTokens(access.token, refresh.token);
-
-        console.log('Вы успешно вошли в систему:', response.data);
-      }
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        setErrorMessage(error.response?.data?.detail || 'Ошибка при входе. Проверьте данные.');
-        console.error('Ошибка входа:', error.response?.data);
-      } else {
-        setErrorMessage('Что-то пошло не так.');
-        console.error('Непредвиденная ошибка:', error);
-      }
-    }
+    dispatch(loginAsync(formData));  
   };
+
+   
+  if (isAuthenticated) {
+    return <Navigate to={AppRoute.Profile} />;
+  }
 
   return (
     <div className={styles.container}>
@@ -64,7 +50,7 @@ export default function Login() {
         </div>
 
         <div className={styles.inputGroup}>
-          <label htmlFor="password">Пароль</label>
+          <label htmlFor="password">Password</label>
           <input
             type="password"
             id="password"
@@ -75,9 +61,10 @@ export default function Login() {
           />
         </div>
 
-        {errorMessage && <p className={styles.error}>{errorMessage}</p>}
+        {loading && <p className={styles.loading}>Loading...</p>}
+        {error && <p className={styles.error}>{error}</p>}
 
-        <button type="submit" className={styles.submitButton}>
+        <button type="submit" className={styles.submitButton} disabled={loading}>
           Log In
         </button>
       </form>

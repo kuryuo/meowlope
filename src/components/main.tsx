@@ -1,10 +1,10 @@
 import { HelmetProvider } from "react-helmet-async";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AppRoute } from "../const";
-import Register from "../components/auth/register";
-import Login from "../components/auth/login";
-import Header from "../components/header/header";
-import Menu from "../components/menu/menu"
+import Register from "./auth/register";
+import Login from "./auth/login";
+import Header from "./header/header";
+import Menu from "./menu/menu"
 import Search from "./search/search";
 import PostEditor from "./post-editor/post-editor";
 

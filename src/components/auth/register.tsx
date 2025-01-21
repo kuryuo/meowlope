@@ -1,11 +1,10 @@
 import { Link } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { register } from '../../services/api';
-import { setTokens } from '../../services/token';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { registerAsync } from '../../store/authSlice';
 import { AppRoute } from '../../const';
 import styles from './auth.module.css';
-import axios from 'axios';
 
 const validationSchema = Yup.object({
   username: Yup.string()
@@ -14,7 +13,7 @@ const validationSchema = Yup.object({
     .required('Username is required'),
   email: Yup.string().email('Invalid email format').required('Email is required'),
   password: Yup.string()
-    .min(3, 'Password must be at least 4 characters')
+    .min(4, 'Password must be at least 4 characters')
     .required('Password is required'),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref('password')], 'Passwords must match')
@@ -22,6 +21,9 @@ const validationSchema = Yup.object({
 });
 
 export default function Register() {
+  const dispatch = useAppDispatch();
+  const { loading, error } = useAppSelector((state) => state.auth);
+
   const formik = useFormik({
     initialValues: {
       username: '',
@@ -31,23 +33,8 @@ export default function Register() {
     },
     validationSchema,
     onSubmit: async (values) => {
-      try {
-        const response = await register(values.username, values.email, values.password);
-
-        if (response.status === 200) {
-          const { refresh, access } = response.data;
-
-          setTokens(access.token, refresh.token);
-
-          console.log('Вы успешно зарегистрировались:', response.data);
-        }
-      } catch (error) {
-        if (axios.isAxiosError(error)) {
-          console.error('Ошибка при регистрации:', error.response?.data || error.message);
-        } else {
-          console.error('Непредвиденная ошибка:', error);
-        }
-      }
+      const { username, email, password } = values;
+      dispatch(registerAsync({ username, email, password }));
     },
   });
 
@@ -119,8 +106,10 @@ export default function Register() {
           )}
         </div>
 
-        <button type="submit" className={styles.submitButton}>
-          Sign up
+        {error && <div className={styles.error}>{error}</div>}
+
+        <button type="submit" className={styles.submitButton} disabled={loading}>
+          {loading ? 'Loading...' : 'Sign up'}
         </button>
       </form>
       <p className={styles.loginPrompt}>
