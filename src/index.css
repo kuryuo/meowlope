@@ -59,12 +59,14 @@ body {
 }
 
 h2 {
-  font: 700 25px;
+  font-weight: 700;
+  font-size: 25px;
   color: var(--lavender);
 }
 
 label{
-  font: 400 14px;
+  font-weight: 400;
+  font-size: 14px;
   display: block;
   color: var(--grey);
 }
@@ -79,6 +81,12 @@ a:hover {
 }
 
 p{
-  font: 400 14px;
+  font-weight: 400;
+  font-size: 14px;
   color: var(--black);
+}
+
+span{
+  font-weight: 600;
+  font-size: 14px;
 }

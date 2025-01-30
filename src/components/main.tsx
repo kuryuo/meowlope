@@ -7,6 +7,8 @@ import Header from "./header/header";
 import Menu from "./menu/menu"
 import Search from "./search/search";
 import PostEditor from "./post-editor/post-editor";
+import Post from "./post/post";
+import Profile from "./profile/profile";
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
           <Route path={AppRoute.Menu} element={<Menu />} />
           <Route path={AppRoute.Search} element={<Search/>} />
           <Route path={AppRoute.PostEditor} element={<PostEditor/>} />
+          <Route path={AppRoute.Post} element={<Post/>} />
+          <Route path={AppRoute.Profile} element={<Profile/>} />
         </Routes>
       </BrowserRouter>
     </HelmetProvider>

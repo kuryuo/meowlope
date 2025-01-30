@@ -17,11 +17,9 @@ const PostEditor = () => {
         placeholder="Compose new post"
       />
       <div className={styles.icons}>
-        <span className={styles.icon}>📷</span>{" "}
-        {/* Заглушка для загрузки фото */}
-        <span className={styles.icon}>🎥</span>{" "}
-        {/* Заглушка для загрузки видео */}
-        <span className={styles.icon}>📊</span> {/* Заглушка для опросов */}
+        <span className={styles.icon}>📷</span>
+        <span className={styles.icon}>🎥</span>
+        <span className={styles.icon}>📊</span>
       </div>
       <button className={styles.postButton}>Post</button>
     </div>

@@ -6,6 +6,7 @@ export enum  AppRoute {
   Search = '/search',
   PostEditor = '/posted',
   Profile = '/profile',
+  Post = '/post',
 };
 
 export enum APIRoute {
